@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposta Cap Training</title>
+<meta name="description" content="Proposta de tráfego, atendimento por IA e dashboard para o Cap Training">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f14; --card:#121821; --card2:#171f2a; --line:#243043;
+  --text:#eef2f7; --muted:#9aa7b8; --green:#22c55e; --green-d:#16a34a;
+  --amber:#f59e0b; --red:#ef4444; --blue:#38bdf8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
+h1,h2,h3{line-height:1.15;margin:0 0 12px}
+h1{font-size:clamp(28px,6vw,42px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(22px,4.5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px}
+h3{font-size:17px;font-weight:600}
+p{margin:0 0 14px}
+.muted{color:var(--muted)}
+.kicker{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+section{padding:36px 0 8px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0;padding-top:28px}
+.hero{padding:40px 0 28px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted);margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.card.quote{border-left:4px solid var(--amber)}
+.card.good{border-left:4px solid var(--green)}
+.card.bad{border-left:4px solid var(--red)}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:620px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c3{grid-template-columns:1fr 1fr 1fr}}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em;color:#fff}
+.stat span{font-size:13px;color:var(--muted)}
+ul{padding-left:20px;margin:0 0 14px}
+li{margin:6px 0}
+.check li{list-style:none;position:relative;padding-left:28px}
+.check li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green);font-weight:800}
+.x li{list-style:none;position:relative;padding-left:28px}
+.x li::before{content:"✕";position:absolute;left:0;top:0;color:var(--red);font-weight:800}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:12px 0 12px 54px;border-bottom:1px dashed var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:12px;width:38px;height:38px;border-radius:50%;background:var(--green);color:#04150a;font-weight:800;display:flex;align-items:center;justify-content:center}
+.steps small{display:block;color:var(--muted);font-size:13px}
+table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:15px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+td.r,th.r{text-align:right;white-space:nowrap}
+.price{background:linear-gradient(180deg,#132a1b,#101a14);border:1px solid #1f5a33;border-radius:16px;padding:22px;margin:16px 0}
+.price .big{font-size:clamp(30px,7vw,44px);font-weight:800;letter-spacing:-.02em;color:#fff;margin:4px 0}
+.price .big small{font-size:16px;font-weight:600;color:var(--muted)}
+.tag{display:inline-block;background:#1f5a33;color:#bbf7d0;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:8px}
+.cta{display:block;text-align:center;background:var(--green);color:#04150a;font-weight:800;font-size:18px;padding:18px;border-radius:14px;text-decoration:none;margin:18px 0 8px}
+.note{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted);margin:4px 6px 0 0}
+.sig{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.sig b{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">Proposta comercial</span>
+  <h1>Você construiu o aparelho.<br>Eu construo a máquina que vende ele.</h1>
+  <p class="muted" style="font-size:17px">Tráfego pago + atendente de IA no WhatsApp + painel de resultados para o <b style="color:#fff">Cap Training</b>, operados por quem já vendeu pela internet para pais de crianças que jogam futebol.</p>
+  <div class="meta">
+    <span>Para: <b>Cap Training / Capixaba Express</b></span>
+    <span>De: <b>Isaías Oliveira</b></span>
+    <span>Data: 19/10/2026</span>
+    <span>Válida até: <b>26/10/2026</b></span>
+  </div>
+</header>
+
+<section>
+  <span class="kicker">1 · O que você me contou</span>
+  <h2>Eu ouvi o seu áudio. E entendi o tamanho da aposta.</h2>
+  <div class="card quote">
+    <p><b>Seis meses</b> de loja e site no ar, e as vendas não vieram.</p>
+    <p><b>"Só dinheiro saindo."</b> Cada mês sem vender descapitaliza mais.</p>
+    <p>Você <b>vendeu duas lojas</b> há mais de um ano para se dedicar só ao Cap Training.</p>
+    <p style="margin:0">Está com <b>pouca grana</b> e quer <b>começar devagar</b>, sem apostar tudo de novo.</p>
+  </div>
+  <p>Isso não é um problema de produto. Pelo que vi no site, o Cap Training tem o que precisa: um aparelho único, dois tamanhos, ex-atletas e professor de Educação Física avalizando, preço parcelado em 12x. <b>O que falta é a máquina que coloca o produto na frente do pai certo e fecha a venda no WhatsApp.</b> É exatamente isso que eu monto.</p>
+</section>
+
+<section>
+  <span class="kicker">2 · O que eu encontrei</span>
+  <h2>Diagnóstico do que está no ar hoje</h2>
+  <p class="muted">Fiz uma análise técnica do site capixabaexpress.com.br e do Instagram @captraining8 antes de escrever esta proposta.</p>
+
+  <div class="card bad">
+    <h3>O site não tem o Pixel da Meta instalado</h3>
+    <p style="margin:0">Sem o Pixel, o Facebook e o Instagram não aprendem quem é o pai que compra. Qualquer anúncio hoje roda <b>no escuro</b>: você paga por clique e a plataforma não consegue achar mais gente parecida com quem comprou. Isso é o primeiro item do setup.</p>
+  </div>
+  <div class="card bad">
+    <h3>O botão "Quero comprar" manda para o WhatsApp sem ninguém respondendo na hora</h3>
+    <p style="margin:0">Pai decide no impulso, à noite, no sofá. Se a resposta chega uma hora depois, a venda esfriou. Uma atendente de IA responde em segundos, 24 horas, tira as dúvidas (idade, tamanho, montagem, frete, parcelamento) e manda o link de pagamento.</p>
+  </div>
+  <div class="card bad">
+    <h3>Instagram com 1.761 seguidores seguindo 7.771 contas</h3>
+    <p style="margin:0">É crescimento na mão, um por um. Não escala e não vende. Com anúncio, o perfil vira vitrine de quem já chegou interessado, não a fonte de tráfego.</p>
+  </div>
+  <div class="card good">
+    <h3>O que já está a seu favor</h3>
+    <ul class="check" style="margin:0">
+      <li>Ticket de R$ 585 e R$ 685 em 12x: dá para vender <b>numa única conversa</b>, sem reunião, sem visita.</li>
+      <li>Loja com checkout pronto (pagamento no site) e entrega em todo o Brasil.</li>
+      <li>Avaliações de ex-atletas profissionais e professor de Educação Física: prova social pronta para virar anúncio.</li>
+      <li>Produto filmável: criança cabeceando, reflexo, coordenação. Vídeo de 10 segundos já conta a história.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">3 · Por que eu</span>
+  <h2>Eu já estou do outro lado desse mesmo balcão</h2>
+  <p>Vendo pela internet desde <b>2012</b>. Não sou agência que aprende no seu dinheiro.</p>
+  <div class="grid c3">
+    <div class="stat"><b>R$ 6 mi</b><span>investidos em anúncios no Meta (Facebook e Instagram) sob minha gestão</span></div>
+    <div class="stat"><b>+300 mil</b><span>serviços vendidos pela internet, todos fechados pelo WhatsApp</span></div>
+    <div class="stat"><b>+150</b><span>parceiros e empresas que já operaram com a minha estrutura</span></div>
+  </div>
+  <div class="grid c2" style="margin-top:12px">
+    <div class="stat"><b>15 anos</b><span>operando negócio próprio com tráfego pago como motor principal</span></div>
+    <div class="stat"><b>Mesmo público</b><span>hoje opero um produto digital para pais de crianças que jogam futebol. Eu sei o que esse pai lê, clica e compra.</span></div>
+  </div>
+  <p style="margin-top:16px">A atendente de IA e o painel que você vai receber não são promessa de slide: são as mesmas ferramentas que eu uso todos os dias na minha própria operação. Você entra numa estrutura que já existe, já atende e já vende.</p>
+</section>
+
+<section>
+  <span class="kicker">4 · O método</span>
+  <h2>Três motores, um resultado: venda no WhatsApp</h2>
+  <div class="grid c3">
+    <div class="card" style="margin:0">
+      <h3>⚽ Atração</h3>
+      <p class="muted" style="margin:0">Anúncios no Instagram e Facebook, mostrados só para pais e mães de crianças de 4 a 12 anos, escolinhas e professores. Vídeos curtos do aparelho em uso. Eu crio, testo e otimizo toda semana.</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h3>💬 Conversão</h3>
+      <p class="muted" style="margin:0">Atendente de IA no seu WhatsApp. Responde em segundos, 24 horas, treinada no Cap Training: idade, tamanho, montagem, frete, parcelamento. Manda o link de pagamento e volta a chamar quem parou de responder.</p>
+    </div>
+    <div class="card" style="margin:0">
+      <h3>📊 Controle</h3>
+      <p class="muted" style="margin:0">Painel no seu celular: quanto gastou hoje, quantas conversas chegaram, quantas vendas saíram, quanto custou cada venda. Sem achismo. Você decide com número na mão.</p>
+    </div>
+  </div>
+  <p style="margin-top:16px"><b>A regra do jogo:</b> o primeiro mês serve para descobrir o seu custo real por venda. A partir daí só escala o que paga. Começar devagar não é limitação, é o método certo para quem não pode queimar caixa.</p>
+</section>
+
+<section>
+  <span class="kicker">5 · Como vai acontecer</span>
+  <h2>Do "sim" ao primeiro anúncio no ar em 14 dias</h2>
+  <ol class="steps">
+    <li><b>Briefing (40 min, online)</b><small>Produto, margem, estoque, prazo de envio, dúvidas mais comuns dos clientes. Dia 1.</small></li>
+    <li><b>Base técnica</b><small>Pixel da Meta + API de Conversões no site, conta de anúncios configurada, públicos criados. Dias 2 a 4.</small></li>
+    <li><b>Atendente de IA treinada no Cap Training</b><small>Fluxo de venda, respostas para toda dúvida, link de pagamento, recuperação de quem sumiu. Você aprova as respostas antes de ligar. Dias 4 a 8.</small></li>
+    <li><b>Criativos</b><small>Primeiros 6 anúncios (vídeo e imagem) a partir das suas fotos e vídeos do aparelho. Você grava com o celular, eu roteirizo e edito. Dias 5 a 10.</small></li>
+    <li><b>Campanhas no ar + painel ligado</b><small>Anúncios rodando, atendente respondendo, painel mostrando tudo em tempo real. Dia 14.</small></li>
+    <li><b>Otimização semanal</b><small>Toda semana: desligo o que não vende, escalo o que vende, criativo novo no ar. Relatório curto no seu WhatsApp.</small></li>
+  </ol>
+</section>
+
+<section>
+  <span class="kicker">6 · Investimento</span>
+  <h2>Preço fechado, sem surpresa</h2>
+
+  <div class="price">
+    <span class="tag">Pagamento único</span>
+    <div class="big">R$ 3.000 <small>setup</small></div>
+    <ul class="check" style="margin:10px 0 0">
+      <li>Pixel + API de Conversões instalados e testados no site</li>
+      <li>Conta de anúncios e Gerenciador de Negócios estruturados</li>
+      <li>Atendente de IA treinada no Cap Training e ligada no seu WhatsApp</li>
+      <li>Painel de resultados configurado no seu celular</li>
+      <li>6 criativos iniciais (roteiro, edição e copy)</li>
+      <li>Campanhas criadas, testadas e no ar</li>
+    </ul>
+  </div>
+
+  <div class="price">
+    <span class="tag">Mensal</span>
+    <div class="big">R$ 1.500 <small>/ mês</small></div>
+    <ul class="check" style="margin:10px 0 0">
+      <li>Gestão diária das campanhas (Instagram e Facebook)</li>
+      <li>Criativos novos toda semana</li>
+      <li>Atendente de IA e painel em funcionamento, com hospedagem inclusa</li>
+      <li>Relatório semanal no WhatsApp + reunião mensal de 30 min</li>
+      <li>Contrato mensal, sem fidelidade: aviso de 30 dias para encerrar</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:22px">E a verba de anúncio?</h3>
+  <p>A verba de mídia é paga direto para a Meta, no seu cartão, na sua conta. Eu não toco nesse dinheiro. Como você quer começar devagar, a sugestão é:</p>
+  <table>
+    <tr><th>Item</th><th class="r">Mês 1</th><th class="r">Mês 2 em diante</th></tr>
+    <tr><td>Setup (uma vez)</td><td class="r">R$ 3.000</td><td class="r">—</td></tr>
+    <tr><td>Gestão + IA + painel</td><td class="r">R$ 1.500</td><td class="r">R$ 1.500</td></tr>
+    <tr><td>Verba de anúncio sugerida (R$ 40/dia, pago à Meta)</td><td class="r">R$ 1.200</td><td class="r">R$ 1.200</td></tr>
+    <tr><td><b>Total</b></td><td class="r"><b>R$ 5.700</b></td><td class="r"><b>R$ 2.700</b></td></tr>
+  </table>
+  <p class="note">A verba de R$ 40/dia é o mínimo para a Meta aprender e ainda sobrar dado para decidir. Ela pode subir só quando o painel mostrar que cada real investido está voltando. Você controla o botão: pode pausar a qualquer momento.</p>
+  <p class="note">Garantia de resultado ninguém sério promete. O que eu prometo é método, transparência total no painel e a mesma estrutura que uso no meu próprio negócio.</p>
+</section>
+
+<section>
+  <span class="kicker">7 · O que você não vai mais precisar fazer</span>
+  <ul class="x">
+    <li>Aprender o Gerenciador de Anúncios</li>
+    <li>Responder WhatsApp de madrugada ou perder a venda por demora</li>
+    <li>Adivinhar se o anúncio está dando certo</li>
+    <li>Pagar agência que "testa" com o seu dinheiro</li>
+  </ul>
+  <p>Você cuida do aparelho, da produção e da entrega. Eu cuido de trazer o pai, convencer e fechar.</p>
+</section>
+
+<section>
+  <span class="kicker">8 · Próximo passo</span>
+  <h2>Pra começar, basta uma palavra</h2>
+  <p>Me responde aqui no WhatsApp com <b>"BORA"</b>. Eu te mando o link do setup e já marcamos o briefing de 40 minutos para esta semana. Em 14 dias o primeiro anúncio está no ar.</p>
+  <a class="cta" href="#">Responder "BORA" no WhatsApp</a>
+  <p class="note" style="text-align:center">Proposta válida até <b>26/10/2026</b>. Depois disso precisa ser refeita, porque a agenda de setup do mês fecha.</p>
+
+  <div class="sig">
+    <b>Isaías Oliveira</b><br>
+    Tráfego pago, atendimento por IA e automação de vendas desde 2012<br>
+    Instagram: @isaias.c.oliveira
+  </div>
+</section>
+
+</div>
+</body>
+</html>
