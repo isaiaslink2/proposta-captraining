@@ -177,7 +177,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px;text-align:center
 <div class="deadline">
   <div class="wrap">
     <span class="lbl">Proposta expira</span>
-    <span class="txt">Estas condições valem até <b>26/10/2026</b>. Depois, a vaga de implantação desta semana e o valor do setup são recalculados.</span>
+    <span class="txt">Estas condições valem por <b>24 horas</b>, até <b>20/10/2026 às 17h</b>. Depois, a vaga de implantação desta semana e o valor do setup são recalculados.</span>
     <div class="clock" id="clock">
       <div class="cu"><b id="cd">--</b><span>dias</span></div>
       <div class="cu"><b id="ch">--</b><span>horas</span></div>
@@ -455,7 +455,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px;text-align:center
     <details><summary>Tem fidelidade? E se eu quiser parar?</summary><p>Não existe fidelidade nem multa. As mensalidades correm mês a mês. Se não fizer sentido, você avisa no ciclo anterior e encerramos. O setup é pago uma vez e as correções no site ficam com você.</p></details>
     <details><summary>Você garante resultado?</summary><p>Garantir venda é mentir. O que eu garanto é método, transparência total no painel e a mesma estrutura que roda no meu próprio negócio. Quem te prometer número de vendas antes de rodar está chutando com o seu dinheiro.</p></details>
     <details><summary>Quem opera no dia a dia?</summary><p>Eu, diretamente. Não existe camada de atendimento entre nós. Você fala com quem mexe na campanha e com quem treina a atendente.</p></details>
-    <details><summary>Por que a proposta tem prazo?</summary><p>Porque a implantação é feita por mim, uma de cada vez, e a agenda desta semana tem uma vaga. Depois de 26/10 o cronograma entra na fila do próximo ciclo e as condições são recalculadas. Não é pressão de vendedor: é capacidade real de entrega.</p></details>
+    <details><summary>Por que a proposta tem prazo?</summary><p>Porque a implantação é feita por mim, uma de cada vez, e a agenda desta semana tem uma vaga. Depois das 24 horas o cronograma entra na fila do próximo ciclo e as condições são recalculadas. Não é pressão de vendedor: é capacidade real de entrega.</p></details>
   </div>
 </section>
 
@@ -468,7 +468,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px;text-align:center
       <a class="btn" href="#comecar" onclick="return false">Responder "BORA" no WhatsApp</a>
       <a class="btn ghost" href="#diagnostico">Rever os 8 pontos</a>
     </div>
-    <p class="fine">Sem fidelidade e sem multa. Mensalidade só a partir do 30º dia. Verba de mídia no seu cartão, no seu controle. Proposta válida até 26/10/2026.</p>
+    <p class="fine">Sem fidelidade e sem multa. Mensalidade só a partir do 30º dia. Verba de mídia no seu cartão, no seu controle. Proposta válida por 24 horas, até 20/10/2026 às 17h.</p>
   </div>
 </section>
 
@@ -476,7 +476,7 @@ footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px;text-align:center
 
 <script>
 (function(){
-  var end=new Date('2026-10-26T23:59:59-03:00').getTime();
+  var end=new Date('2026-10-20T17:00:00-03:00').getTime();
   function pad(n){return (n<10?'0':'')+n}
   function tick(){
     var d=Math.max(0,end-Date.now());
