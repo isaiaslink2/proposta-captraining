@@ -3,237 +3,509 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Proposta Cap Training</title>
-<meta name="description" content="Proposta de tráfego, atendimento por IA e dashboard para o Cap Training">
+<title>Proposta — Cap Training × Isaías Oliveira</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0f14; --card:#121821; --card2:#171f2a; --line:#243043;
-  --text:#eef2f7; --muted:#9aa7b8; --green:#22c55e; --green-d:#16a34a;
-  --amber:#f59e0b; --red:#ef4444; --blue:#38bdf8;
+  --void:#080B10; --panel:#0F141C; --panel-2:#131A24;
+  --line:#1E2836; --line-soft:#182029;
+  --signal:#22D3A5; --amber:#F5A524; --alert:#FF6B5B;
+  --ink:#E8EFF6; --ink-2:#A9B8C9; --muted:#6E7F92;
+  --shadow:0 20px 60px rgba(0,0,0,.55);
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --void:#F2F5F8; --panel:#FFFFFF; --panel-2:#F7F9FB; --line:#DCE4EC; --line-soft:#E8EEF3;
+    --signal:#0F9E77; --amber:#B87309; --alert:#CC3A2A;
+    --ink:#0B141D; --ink-2:#3D5163; --muted:#6B7E90;
+    --shadow:0 16px 44px rgba(15,40,70,.10);
+  }
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
-h1,h2,h3{line-height:1.15;margin:0 0 12px}
-h1{font-size:clamp(28px,6vw,42px);font-weight:800;letter-spacing:-.02em}
-h2{font-size:clamp(22px,4.5vw,28px);font-weight:800;letter-spacing:-.01em;margin-top:8px}
-h3{font-size:17px;font-weight:600}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--signal);display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--signal);opacity:.7}
+h1{font-size:clamp(30px,5vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:0 0 18px;text-wrap:balance}
+h2{font-size:clamp(24px,3.4vw,36px);font-weight:800;letter-spacing:-.025em;margin:0 0 10px;text-wrap:balance;line-height:1.15}
+h3{font-size:18px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
 p{margin:0 0 14px}
-.muted{color:var(--muted)}
-.kicker{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
-section{padding:36px 0 8px;border-top:1px solid var(--line)}
-section:first-of-type{border-top:0;padding-top:28px}
-.hero{padding:40px 0 28px}
-.hero .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted);margin-top:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
-.card.quote{border-left:4px solid var(--amber)}
-.card.good{border-left:4px solid var(--green)}
-.card.bad{border-left:4px solid var(--red)}
-.grid{display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:620px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c3{grid-template-columns:1fr 1fr 1fr}}
-.stat{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px}
-.stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em;color:#fff}
-.stat span{font-size:13px;color:var(--muted)}
-ul{padding-left:20px;margin:0 0 14px}
-li{margin:6px 0}
-.check li{list-style:none;position:relative;padding-left:28px}
-.check li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green);font-weight:800}
-.x li{list-style:none;position:relative;padding-left:28px}
-.x li::before{content:"✕";position:absolute;left:0;top:0;color:var(--red);font-weight:800}
-.steps{counter-reset:s;list-style:none;padding:0;margin:0}
-.steps li{counter-increment:s;position:relative;padding:12px 0 12px 54px;border-bottom:1px dashed var(--line)}
-.steps li:last-child{border-bottom:0}
-.steps li::before{content:counter(s);position:absolute;left:0;top:12px;width:38px;height:38px;border-radius:50%;background:var(--green);color:#04150a;font-weight:800;display:flex;align-items:center;justify-content:center}
-.steps small{display:block;color:var(--muted);font-size:13px}
-table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:15px}
-th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
-td.r,th.r{text-align:right;white-space:nowrap}
-.price{background:linear-gradient(180deg,#132a1b,#101a14);border:1px solid #1f5a33;border-radius:16px;padding:22px;margin:16px 0}
-.price .big{font-size:clamp(30px,7vw,44px);font-weight:800;letter-spacing:-.02em;color:#fff;margin:4px 0}
-.price .big small{font-size:16px;font-weight:600;color:var(--muted)}
-.tag{display:inline-block;background:#1f5a33;color:#bbf7d0;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:8px}
-.cta{display:block;text-align:center;background:var(--green);color:#04150a;font-weight:800;font-size:18px;padding:18px;border-radius:14px;text-decoration:none;margin:18px 0 8px}
-.note{font-size:13px;color:var(--muted)}
-.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted);margin:4px 6px 0 0}
-.sig{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
-.sig b{color:var(--text)}
+.lede{color:var(--ink-2);max-width:62ch;margin:0 0 30px;font-size:16px}
+section{padding:64px 0;border-top:1px solid var(--line-soft)}
+@media(max-width:640px){section{padding:44px 0}}
+a{color:var(--signal)}
+.acc{color:var(--signal)} .warn{color:var(--amber)} .bad{color:var(--alert)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.card.soft{background:var(--panel-2)}
+
+/* deadline */
+.deadline{background:linear-gradient(90deg,color-mix(in srgb,var(--alert) 16%,var(--void)),color-mix(in srgb,var(--amber) 12%,var(--void)));border-bottom:1px solid color-mix(in srgb,var(--alert) 32%,var(--line))}
+.deadline .wrap{display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.deadline .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--alert);font-weight:700}
+.deadline .txt{font-size:12.5px;color:var(--ink-2)}
+.clock{margin-left:auto;display:flex;gap:6px}
+.cu{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:5px 9px;text-align:center;min-width:48px}
+.cu b{display:block;font-family:var(--mono);font-size:17px;font-weight:800;color:var(--ink);line-height:1.1}
+.cu span{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--void) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
+.topbar .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.brand{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.brand b{color:var(--ink)}
+.nav{margin-left:auto;display:flex;gap:18px;font-size:13px}
+.nav a{color:var(--ink-2);text-decoration:none}
+.nav a:hover{color:var(--ink)}
+@media(max-width:760px){.nav{display:none}}
+
+/* hero */
+.hero{padding:64px 0 40px;border-top:0}
+.hero .lede{font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--ink-2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.kpi span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.kpi b{font-family:var(--mono);font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--signal);color:#06241A;font-weight:800;font-size:16px;padding:16px 26px;border-radius:12px;text-decoration:none;border:0;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:active{transform:translateY(1px)}
+
+/* audio quote */
+.quote{border-left:3px solid var(--amber);padding:6px 0 6px 18px;color:var(--ink-2);font-size:16px}
+.quote b{color:var(--ink)}
+
+/* diagnostic */
+.diag{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media(max-width:900px){.diag{grid-template-columns:1fr}}
+.shot{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.shot .src{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;justify-content:space-between;gap:10px}
+.shot img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+.phones{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.phones{grid-template-columns:1fr}}
+.phone{position:relative}
+.phone img{aspect-ratio:600/1299;object-fit:cover;object-position:top}
+.pin{position:absolute;z-index:2;background:var(--alert);color:#fff;font-family:var(--mono);font-weight:800;font-size:12px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px color-mix(in srgb,var(--alert) 28%,transparent)}
+.cap{font-size:12.5px;color:var(--ink-2);margin:10px 2px 0}
+.cap b{color:var(--alert)}
+.leaks{counter-reset:l;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.leaks li{counter-increment:l;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 16px 16px 58px;position:relative}
+.leaks li::before{content:counter(l);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:50%;background:var(--alert);color:#fff;font-family:var(--mono);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.leaks b{display:block;font-size:15px;margin-bottom:3px}
+.leaks p{margin:0;font-size:14px;color:var(--ink-2)}
+.leaks .fix{display:block;margin-top:8px;font-size:13px;color:var(--signal)}
+.leaks .fix::before{content:"→ ";font-family:var(--mono)}
+code{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--ink)}
+
+/* proof */
+.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.proof{grid-template-columns:repeat(2,1fr)}}
+.proof .card b{display:block;font-family:var(--mono);font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--ink);line-height:1.1;margin-bottom:6px}
+.proof .card span{font-size:13px;color:var(--ink-2)}
+
+/* fronts */
+.front{display:flex;flex-direction:column;gap:10px}
+.front .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.front ul{margin:4px 0 0;padding-left:18px;color:var(--ink-2);font-size:14px}
+.front li{margin:5px 0}
+
+/* payroll anchor */
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.r,th.r{text-align:right;font-family:var(--mono);white-space:nowrap}
+tr.total td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
+tr.you td{background:color-mix(in srgb,var(--signal) 10%,var(--panel));font-weight:800}
+
+/* price */
+.price{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}
+@media(max-width:900px){.price{grid-template-columns:1fr}}
+.plan{background:linear-gradient(180deg,color-mix(in srgb,var(--signal) 12%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--signal) 40%,var(--line));border-radius:18px;padding:24px}
+.plan .big{font-family:var(--mono);font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1;margin:4px 0 2px}
+.plan .big small{font-size:14px;color:var(--muted);font-family:var(--sans);font-weight:600;letter-spacing:0}
+.plan ul{padding-left:18px;margin:12px 0 0;color:var(--ink-2);font-size:14px}
+.plan li{margin:5px 0}
+.summary{background:var(--panel-2);border:1px solid var(--line);border-radius:18px;padding:22px}
+.summary .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+.summary .row:last-of-type{border-bottom:0}
+.summary .row b{font-family:var(--mono)}
+.summary .tot{margin-top:12px;padding-top:14px;border-top:2px solid var(--line)}
+.summary .tot .big{font-family:var(--mono);font-size:28px;font-weight:800;letter-spacing:-.02em}
+.summary .note{font-size:12.5px;color:var(--muted);margin-top:12px}
+input[type=range]{width:100%;accent-color:var(--signal)}
+.ctl{margin:14px 0}
+.ctl label{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.ctl label b{font-family:var(--mono);color:var(--ink)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px;font-family:var(--mono);font-weight:700;cursor:pointer}
+.seg button.on{border-color:var(--signal);background:color-mix(in srgb,var(--signal) 14%,var(--panel))}
+
+/* timeline */
+.tl{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:900px){.tl{grid-template-columns:1fr}}
+.tl li{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.tl .d{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:8px}
+.tl b{display:block;font-size:15px;margin-bottom:6px}
+.tl p{font-size:13.5px;color:var(--ink-2);margin:0}
+
+/* faq */
+details{border-top:1px solid var(--line);padding:14px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+details[open] summary::after{content:"–"}
+details p{color:var(--ink-2);font-size:15px;margin:10px 0 0}
+
+/* final */
+.final{text-align:center;padding:80px 0}
+.final .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:26px 0 14px}
+.fine{font-size:12.5px;color:var(--muted)}
+footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px;text-align:center;font-family:var(--mono);letter-spacing:.06em}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div class="deadline">
+  <div class="wrap">
+    <span class="lbl">Proposta expira</span>
+    <span class="txt">Estas condições valem até <b>26/10/2026</b>. Depois, a vaga de implantação desta semana e o valor do setup são recalculados.</span>
+    <div class="clock" id="clock">
+      <div class="cu"><b id="cd">--</b><span>dias</span></div>
+      <div class="cu"><b id="ch">--</b><span>horas</span></div>
+      <div class="cu"><b id="cm">--</b><span>min</span></div>
+      <div class="cu"><b id="cs">--</b><span>seg</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="brand"><b>Isaías Oliveira</b> × Cap Training</span>
+    <nav class="nav">
+      <a href="#diagnostico">Diagnóstico</a>
+      <a href="#metodo">O que entra</a>
+      <a href="#investimento">Investimento</a>
+      <a href="#prazos">Prazos</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+  </div>
+</div>
 
 <header class="hero">
-  <span class="kicker">Proposta comercial</span>
-  <h1>Você construiu o aparelho.<br>Eu construo a máquina que vende ele.</h1>
-  <p class="muted" style="font-size:17px">Tráfego pago + atendente de IA no WhatsApp + painel de resultados para o <b style="color:#fff">Cap Training</b>, operados por quem já vendeu pela internet para pais de crianças que jogam futebol.</p>
-  <div class="meta">
-    <span>Para: <b>Cap Training / Capixaba Express</b></span>
-    <span>De: <b>Isaías Oliveira</b></span>
-    <span>Data: 19/10/2026</span>
-    <span>Válida até: <b>26/10/2026</b></span>
+  <div class="wrap">
+    <div class="eyebrow">Proposta técnica · 19 de outubro de 2026</div>
+    <h1>Achei <span class="bad">8 lugares</span> onde o Cap Training perde a venda. E sei consertar todos.</h1>
+    <p class="lede">Você me disse no áudio: seis meses de loja no ar, dinheiro só saindo, duas lojas vendidas pra apostar no aparelho. Eu abri o seu site e o seu Instagram como um pai abriria, pelo celular. O problema não é o produto. É o caminho entre o pai e o botão de pagar, que está quebrado em oito pontos. Esta página mostra cada um, com print, e o que eu faço com ele.</p>
+    <div class="chips">
+      <span class="chip">capixabaexpress.com.br</span>
+      <span class="chip">@captraining8</span>
+      <span class="chip">Espírito Santo → Brasil inteiro</span>
+      <span class="chip">R$ 585 · R$ 685 em 12x</span>
+    </div>
+    <a class="btn" href="#diagnostico">Ver os 8 pontos com print ↓</a>
+    <div class="kpis">
+      <div class="kpi"><span>Para começar hoje</span><b>R$ 3.000</b></div>
+      <div class="kpi"><span>Mensal (só a partir do 30º dia)</span><b>R$ 1.500</b></div>
+      <div class="kpi"><span>Anúncio no ar em</span><b>14 dias</b></div>
+      <div class="kpi"><span>Verba de mídia sugerida</span><b>R$ 40/dia</b></div>
+    </div>
   </div>
 </header>
 
-<section>
-  <span class="kicker">1 · O que você me contou</span>
-  <h2>Eu ouvi o seu áudio. E entendi o tamanho da aposta.</h2>
-  <div class="card quote">
-    <p><b>Seis meses</b> de loja e site no ar, e as vendas não vieram.</p>
-    <p><b>"Só dinheiro saindo."</b> Cada mês sem vender descapitaliza mais.</p>
-    <p>Você <b>vendeu duas lojas</b> há mais de um ano para se dedicar só ao Cap Training.</p>
-    <p style="margin:0">Está com <b>pouca grana</b> e quer <b>começar devagar</b>, sem apostar tudo de novo.</p>
-  </div>
-  <p>Isso não é um problema de produto. Pelo que vi no site, o Cap Training tem o que precisa: um aparelho único, dois tamanhos, ex-atletas e professor de Educação Física avalizando, preço parcelado em 12x. <b>O que falta é a máquina que coloca o produto na frente do pai certo e fecha a venda no WhatsApp.</b> É exatamente isso que eu monto.</p>
-</section>
-
-<section>
-  <span class="kicker">2 · O que eu encontrei</span>
-  <h2>Diagnóstico do que está no ar hoje</h2>
-  <p class="muted">Fiz uma análise técnica do site capixabaexpress.com.br e do Instagram @captraining8 antes de escrever esta proposta.</p>
-
-  <div class="card bad">
-    <h3>O site não tem o Pixel da Meta instalado</h3>
-    <p style="margin:0">Sem o Pixel, o Facebook e o Instagram não aprendem quem é o pai que compra. Qualquer anúncio hoje roda <b>no escuro</b>: você paga por clique e a plataforma não consegue achar mais gente parecida com quem comprou. Isso é o primeiro item do setup.</p>
-  </div>
-  <div class="card bad">
-    <h3>O botão "Quero comprar" manda para o WhatsApp sem ninguém respondendo na hora</h3>
-    <p style="margin:0">Pai decide no impulso, à noite, no sofá. Se a resposta chega uma hora depois, a venda esfriou. Uma atendente de IA responde em segundos, 24 horas, tira as dúvidas (idade, tamanho, montagem, frete, parcelamento) e manda o link de pagamento.</p>
-  </div>
-  <div class="card bad">
-    <h3>Instagram com 1.761 seguidores seguindo 7.771 contas</h3>
-    <p style="margin:0">É crescimento na mão, um por um. Não escala e não vende. Com anúncio, o perfil vira vitrine de quem já chegou interessado, não a fonte de tráfego.</p>
-  </div>
-  <div class="card good">
-    <h3>O que já está a seu favor</h3>
-    <ul class="check" style="margin:0">
-      <li>Ticket de R$ 585 e R$ 685 em 12x: dá para vender <b>numa única conversa</b>, sem reunião, sem visita.</li>
-      <li>Loja com checkout pronto (pagamento no site) e entrega em todo o Brasil.</li>
-      <li>Avaliações de ex-atletas profissionais e professor de Educação Física: prova social pronta para virar anúncio.</li>
-      <li>Produto filmável: criança cabeceando, reflexo, coordenação. Vídeo de 10 segundos já conta a história.</li>
-    </ul>
-  </div>
-</section>
-
-<section>
-  <span class="kicker">3 · Por que eu</span>
-  <h2>Eu já estou do outro lado desse mesmo balcão</h2>
-  <p>Vendo pela internet desde <b>2012</b>. Não sou agência que aprende no seu dinheiro.</p>
-  <div class="grid c3">
-    <div class="stat"><b>R$ 6 mi</b><span>investidos em anúncios no Meta (Facebook e Instagram) sob minha gestão</span></div>
-    <div class="stat"><b>+300 mil</b><span>serviços vendidos pela internet, todos fechados pelo WhatsApp</span></div>
-    <div class="stat"><b>+150</b><span>parceiros e empresas que já operaram com a minha estrutura</span></div>
-  </div>
-  <div class="grid c2" style="margin-top:12px">
-    <div class="stat"><b>15 anos</b><span>operando negócio próprio com tráfego pago como motor principal</span></div>
-    <div class="stat"><b>Mesmo público</b><span>hoje opero um produto digital para pais de crianças que jogam futebol. Eu sei o que esse pai lê, clica e compra.</span></div>
-  </div>
-  <p style="margin-top:16px">A atendente de IA e o painel que você vai receber não são promessa de slide: são as mesmas ferramentas que eu uso todos os dias na minha própria operação. Você entra numa estrutura que já existe, já atende e já vende.</p>
-</section>
-
-<section>
-  <span class="kicker">4 · O método</span>
-  <h2>Três motores, um resultado: venda no WhatsApp</h2>
-  <div class="grid c3">
-    <div class="card" style="margin:0">
-      <h3>⚽ Atração</h3>
-      <p class="muted" style="margin:0">Anúncios no Instagram e Facebook, mostrados só para pais e mães de crianças de 4 a 12 anos, escolinhas e professores. Vídeos curtos do aparelho em uso. Eu crio, testo e otimizo toda semana.</p>
+<section id="audio">
+  <div class="wrap">
+    <div class="eyebrow">O que você me contou</div>
+    <h2>Seis meses sem vender não é azar. É vazamento.</h2>
+    <div class="quote">
+      <p>"Já tem seis meses que nós inauguramos a loja, com site, tudo, e não tô conseguindo vender. <b>É só dinheiro saindo.</b>"</p>
+      <p>"Vendi duas lojinhas que eu tinha pra me dedicar apenas ao desenvolvimento desse aparelho."</p>
+      <p style="margin:0">"Eu gostaria de <b>começar mais devagar</b>, porque eu tô com pouca grana."</p>
     </div>
-    <div class="card" style="margin:0">
-      <h3>💬 Conversão</h3>
-      <p class="muted" style="margin:0">Atendente de IA no seu WhatsApp. Responde em segundos, 24 horas, treinada no Cap Training: idade, tamanho, montagem, frete, parcelamento. Manda o link de pagamento e volta a chamar quem parou de responder.</p>
+    <p style="margin-top:22px;max-width:70ch">Eu respeito isso. Por isso esta proposta começa pequena na mídia e grande na correção: primeiro a gente tampa os vazamentos, depois liga o anúncio. Colocar verba num site que não deixa o pai comprar é o único jeito garantido de perder mais dinheiro.</p>
+  </div>
+</section>
+
+<section id="diagnostico">
+  <div class="wrap">
+    <div class="eyebrow">Diagnóstico · feito em 19/10/2026, pelo celular</div>
+    <h2>Os 8 vazamentos, com print</h2>
+    <p class="lede">Tudo abaixo foi verificado por mim hoje, no seu site e no seu Instagram, do jeito que um pai veria no celular depois de clicar num anúncio.</p>
+
+    <div class="phones">
+      <div class="phone shot">
+        <div class="src"><span>capixabaexpress.com.br · celular</span><span>1ª tela</span></div>
+        <span class="pin" style="left:22px;top:60px">1</span>
+        <img src="img/site-hero.jpg" width="600" height="1299" alt="Primeira tela do site no celular: uma palavra por linha, sem produto e sem botão">
+        <p class="cap"><b>1 ·</b> A primeira tela é só texto, uma palavra por linha. Sem foto do aparelho, sem preço, sem botão. O pai precisa rolar várias telas pra entender o que é.</p>
+      </div>
+      <div class="phone shot">
+        <div class="src"><span>capixabaexpress.com.br · celular</span><span>botão principal</span></div>
+        <span class="pin" style="left:22px;top:60px">2</span>
+        <span class="pin" style="right:22px;top:60px">3</span>
+        <img src="img/site-cta.jpg" width="600" height="1299" alt="Botão SIM, QUERO COMPRAR AGORA e a página cortada na lateral">
+        <p class="cap"><b>2 ·</b> O botão "SIM, QUERO COMPRAR AGORA" aponta para <code>#</code>. Cliquei: não acontece nada. <b>3 ·</b> A página vaza pra lateral no celular (texto cortado, faixa branca à direita).</p>
+      </div>
+      <div class="phone shot">
+        <div class="src"><span>capixabaexpress.com.br · celular</span><span>meio da página</span></div>
+        <span class="pin" style="left:22px;top:60px">4</span>
+        <img src="img/site-cards-branco.jpg" width="600" height="1299" alt="Blocos em branco no meio da página">
+        <p class="cap"><b>4 ·</b> Blocos inteiros em branco no meio da página. O pai vê caixa vazia, acha que o site quebrou e fecha.</p>
+      </div>
     </div>
-    <div class="card" style="margin:0">
-      <h3>📊 Controle</h3>
-      <p class="muted" style="margin:0">Painel no seu celular: quanto gastou hoje, quantas conversas chegaram, quantas vendas saíram, quanto custou cada venda. Sem achismo. Você decide com número na mão.</p>
+
+    <div class="diag" style="margin-top:28px">
+      <div class="shot">
+        <div class="src"><span>instagram.com/captraining8</span><span>19/10/2026</span></div>
+        <span class="pin" style="left:22px;top:48px">5</span>
+        <span class="pin" style="left:22px;top:90px">6</span>
+        <img src="img/ig-perfil.jpg" width="800" height="700" alt="Perfil do Instagram: 1.761 seguidores, 7.361 seguindo, link da bio para cart-2">
+        <p class="cap"><b>5 ·</b> 1.761 seguidores seguindo 7.361 contas: crescimento na mão, um por um. <b>6 ·</b> O link da bio é <code>capixabaexpress.com.br/cart-2</code>. Abri: <b>"Seu carrinho está vazio."</b> Quem chega pelo Instagram cai num carrinho vazio, não no produto.</p>
+      </div>
+      <div class="shot">
+        <div class="src"><span>Biblioteca de Anúncios da Meta · Brasil</span><span>busca: captraining</span></div>
+        <span class="pin" style="left:22px;top:48px">7</span>
+        <img src="img/ad-library.jpg" width="800" height="622" alt="Biblioteca de Anúncios da Meta: nenhum anúncio corresponde à pesquisa">
+        <p class="cap"><b>7 ·</b> Nenhum anúncio ativo. Hoje o Cap Training só é visto por quem já segue. Nenhum pai novo descobre o aparelho sozinho.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:34px 0 12px">Os 8 pontos e o que eu faço com cada um</h3>
+    <ol class="leaks">
+      <li><b>Primeira tela sem produto, sem preço, sem botão</b><p>No celular, o título vira uma palavra por linha e ocupa a tela inteira.</p><span class="fix">Nova primeira tela: aparelho em uso, preço em 12x, botão de compra visível sem rolar.</span></li>
+      <li><b>Botão principal morto</b><p>"SIM, QUERO COMPRAR AGORA" aponta para <code>#</code>. Testei: não abre nada.</p><span class="fix">Todo botão leva para uma única ação que funciona: pagar no site ou falar com a atendente no WhatsApp, com o produto já na mensagem.</span></li>
+      <li><b>Página vaza pra lateral no celular</b><p>Texto cortado e faixa branca à direita. Sinal de site não testado no telefone.</p><span class="fix">Correção do layout mobile e teste em Android e iPhone, dentro do navegador do Instagram.</span></li>
+      <li><b>Blocos em branco</b><p>Caixas vazias no meio da página, onde deveria ter vídeo.</p><span class="fix">Vídeos leves, carregando certo, com capa visível antes do play.</span></li>
+      <li><b>Instagram crescendo na mão</b><p>1.761 seguidores, 7.361 seguindo. Esforço de seguir conta por conta não vira venda.</p><span class="fix">O Instagram vira vitrine de quem chegou pelo anúncio. O volume vem do tráfego pago, não do follow.</span></li>
+      <li><b>Link da bio cai num carrinho vazio</b><p><code>/cart-2</code> mostra "Seu carrinho está vazio". É o pior lugar pra receber alguém interessado.</p><span class="fix">Link da bio para a página do produto, com rastreio de quem veio do Instagram.</span></li>
+      <li><b>Nenhum anúncio no ar</b><p>Biblioteca de Anúncios da Meta, Brasil, busca por "captraining": nenhum resultado.</p><span class="fix">Campanhas no Instagram e Facebook só para pais e mães de crianças de 4 a 12 anos, escolinhas e professores de Educação Física.</span></li>
+      <li><b>Zero medição e dois links de WhatsApp quebrados</b><p>Sem Pixel da Meta, sem Google Tag: ninguém sabe de onde vem cada visita. Um link é <code>wa.me5527992540265</code> (sem a barra, não abre). Outro é <code>wa.me/27992540265</code>, sem o 55: o WhatsApp entende <b>+27</b>, código da África do Sul.</p><span class="fix">Pixel + API de Conversões instalados e testados, links de WhatsApp corrigidos, e um código em cada botão pra saber qual anúncio gerou cada conversa.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="quem">
+  <div class="wrap">
+    <div class="eyebrow">Por que eu</div>
+    <h2>Eu vendo pela internet desde 2012. E vendo pro mesmo pai que você quer alcançar.</h2>
+    <p class="lede">Não sou agência. Sou dono de operação. O que vou instalar no Cap Training é o que roda no meu próprio negócio todo dia: o anúncio traz, a IA atende, o painel prova.</p>
+    <div class="proof">
+      <div class="card"><b>R$ 6 mi</b><span>investidos em anúncio na Meta sob minha gestão, do meu bolso, não de cliente</span></div>
+      <div class="card"><b>+300 mil</b><span>serviços vendidos pela internet, fechados no WhatsApp</span></div>
+      <div class="card"><b>+150</b><span>parceiros e empresas operando com a minha estrutura</span></div>
+      <div class="card"><b>15 anos</b><span>de operação própria, com tráfego pago como motor</span></div>
+    </div>
+    <div class="card soft" style="margin-top:16px">
+      <h3>O detalhe que importa pra você</h3>
+      <p style="margin:0;color:var(--ink-2)">Hoje eu opero um produto para <b style="color:var(--ink)">pais de crianças que jogam futebol</b>. Eu sei qual vídeo esse pai para pra ver, que pergunta ele faz no WhatsApp às 22h e o que faz ele parcelar em 12x. Você não vai pagar pra eu aprender quem é o seu cliente. Eu já falo com ele todo dia.</p>
     </div>
   </div>
-  <p style="margin-top:16px"><b>A regra do jogo:</b> o primeiro mês serve para descobrir o seu custo real por venda. A partir daí só escala o que paga. Começar devagar não é limitação, é o método certo para quem não pode queimar caixa.</p>
 </section>
 
-<section>
-  <span class="kicker">5 · Como vai acontecer</span>
-  <h2>Do "sim" ao primeiro anúncio no ar em 14 dias</h2>
-  <ol class="steps">
-    <li><b>Briefing (40 min, online)</b><small>Produto, margem, estoque, prazo de envio, dúvidas mais comuns dos clientes. Dia 1.</small></li>
-    <li><b>Base técnica</b><small>Pixel da Meta + API de Conversões no site, conta de anúncios configurada, públicos criados. Dias 2 a 4.</small></li>
-    <li><b>Atendente de IA treinada no Cap Training</b><small>Fluxo de venda, respostas para toda dúvida, link de pagamento, recuperação de quem sumiu. Você aprova as respostas antes de ligar. Dias 4 a 8.</small></li>
-    <li><b>Criativos</b><small>Primeiros 6 anúncios (vídeo e imagem) a partir das suas fotos e vídeos do aparelho. Você grava com o celular, eu roteirizo e edito. Dias 5 a 10.</small></li>
-    <li><b>Campanhas no ar + painel ligado</b><small>Anúncios rodando, atendente respondendo, painel mostrando tudo em tempo real. Dia 14.</small></li>
-    <li><b>Otimização semanal</b><small>Toda semana: desligo o que não vende, escalo o que vende, criativo novo no ar. Relatório curto no seu WhatsApp.</small></li>
-  </ol>
-</section>
+<section id="metodo">
+  <div class="wrap">
+    <div class="eyebrow">O que entra</div>
+    <h2>Três frentes, uma operação só</h2>
+    <p class="lede">Cada frente fecha um vazamento específico. Juntas, elas fazem o ciclo inteiro: trazer o pai certo, responder antes de ele esfriar e mostrar quanto custou cada venda.</p>
+    <div class="grid g3">
+      <div class="card front">
+        <span class="tag"><span>Atração</span><span>tráfego</span></span>
+        <h3>Anúncio que traz o pai certo</h3>
+        <p style="color:var(--ink-2);font-size:14.5px;margin:0">Instagram e Facebook, só para quem tem criança de 4 a 12 anos, escolinhas e professores. Vídeos do aparelho em uso. Testo, desligo o que não vende e escalo o que vende, toda semana.</p>
+        <ul>
+          <li>6 criativos iniciais a partir dos seus vídeos</li>
+          <li>Criativo novo toda semana</li>
+          <li>Públicos por idade dos filhos e interesse em futebol</li>
+          <li>Pixel + API de Conversões: a Meta aprende quem compra</li>
+        </ul>
+      </div>
+      <div class="card front">
+        <span class="tag"><span>Conversão</span><span>IA no WhatsApp</span></span>
+        <h3>Atendente que responde em segundos, 24 h</h3>
+        <p style="color:var(--ink-2);font-size:14.5px;margin:0">Pai decide à noite, no sofá. A atendente de IA responde na hora, tira as dúvidas do Cap Training e manda o link de pagamento. Quem some, ela volta a chamar.</p>
+        <ul>
+          <li>Treinada em idade, tamanho, montagem, frete, 12x</li>
+          <li>Envia o link de pagamento dentro da conversa</li>
+          <li>Follow-up automático de quem parou de responder</li>
+          <li>Passa pra você quando o caso pede gente</li>
+        </ul>
+      </div>
+      <div class="card front">
+        <span class="tag"><span>Controle</span><span>painel</span></span>
+        <h3>Painel no seu celular</h3>
+        <p style="color:var(--ink-2);font-size:14.5px;margin:0">Quanto gastou hoje, quantas conversas chegaram, quantas vendas saíram, quanto custou cada uma. Você decide com número, não com sensação.</p>
+        <ul>
+          <li>Gasto, conversas e vendas em tempo real</li>
+          <li>Custo por venda por anúncio</li>
+          <li>Relatório curto no WhatsApp toda semana</li>
+          <li>Reunião mensal de 30 minutos</li>
+        </ul>
+      </div>
+    </div>
 
-<section>
-  <span class="kicker">6 · Investimento</span>
-  <h2>Preço fechado, sem surpresa</h2>
-
-  <div class="price">
-    <span class="tag">Pagamento único</span>
-    <div class="big">R$ 3.000 <small>setup</small></div>
-    <ul class="check" style="margin:10px 0 0">
-      <li>Pixel + API de Conversões instalados e testados no site</li>
-      <li>Conta de anúncios e Gerenciador de Negócios estruturados</li>
-      <li>Atendente de IA treinada no Cap Training e ligada no seu WhatsApp</li>
-      <li>Painel de resultados configurado no seu celular</li>
-      <li>6 criativos iniciais (roteiro, edição e copy)</li>
-      <li>Campanhas criadas, testadas e no ar</li>
-    </ul>
-  </div>
-
-  <div class="price">
-    <span class="tag">Mensal</span>
-    <div class="big">R$ 1.500 <small>/ mês</small></div>
-    <ul class="check" style="margin:10px 0 0">
-      <li>Gestão diária das campanhas (Instagram e Facebook)</li>
-      <li>Criativos novos toda semana</li>
-      <li>Atendente de IA e painel em funcionamento, com hospedagem inclusa</li>
-      <li>Relatório semanal no WhatsApp + reunião mensal de 30 min</li>
-      <li>Contrato mensal, sem fidelidade: aviso de 30 dias para encerrar</li>
-    </ul>
-  </div>
-
-  <h3 style="margin-top:22px">E a verba de anúncio?</h3>
-  <p>A verba de mídia é paga direto para a Meta, no seu cartão, na sua conta. Eu não toco nesse dinheiro. Como você quer começar devagar, a sugestão é:</p>
-  <table>
-    <tr><th>Item</th><th class="r">Mês 1</th><th class="r">Mês 2 em diante</th></tr>
-    <tr><td>Setup (uma vez)</td><td class="r">R$ 3.000</td><td class="r">—</td></tr>
-    <tr><td>Gestão + IA + painel</td><td class="r">R$ 1.500</td><td class="r">R$ 1.500</td></tr>
-    <tr><td>Verba de anúncio sugerida (R$ 40/dia, pago à Meta)</td><td class="r">R$ 1.200</td><td class="r">R$ 1.200</td></tr>
-    <tr><td><b>Total</b></td><td class="r"><b>R$ 5.700</b></td><td class="r"><b>R$ 2.700</b></td></tr>
-  </table>
-  <p class="note">A verba de R$ 40/dia é o mínimo para a Meta aprender e ainda sobrar dado para decidir. Ela pode subir só quando o painel mostrar que cada real investido está voltando. Você controla o botão: pode pausar a qualquer momento.</p>
-  <p class="note">Garantia de resultado ninguém sério promete. O que eu prometo é método, transparência total no painel e a mesma estrutura que uso no meu próprio negócio.</p>
-</section>
-
-<section>
-  <span class="kicker">7 · O que você não vai mais precisar fazer</span>
-  <ul class="x">
-    <li>Aprender o Gerenciador de Anúncios</li>
-    <li>Responder WhatsApp de madrugada ou perder a venda por demora</li>
-    <li>Adivinhar se o anúncio está dando certo</li>
-    <li>Pagar agência que "testa" com o seu dinheiro</li>
-  </ul>
-  <p>Você cuida do aparelho, da produção e da entrega. Eu cuido de trazer o pai, convencer e fechar.</p>
-</section>
-
-<section>
-  <span class="kicker">8 · Próximo passo</span>
-  <h2>Pra começar, basta uma palavra</h2>
-  <p>Me responde aqui no WhatsApp com <b>"BORA"</b>. Eu te mando o link do setup e já marcamos o briefing de 40 minutos para esta semana. Em 14 dias o primeiro anúncio está no ar.</p>
-  <a class="cta" href="#">Responder "BORA" no WhatsApp</a>
-  <p class="note" style="text-align:center">Proposta válida até <b>26/10/2026</b>. Depois disso precisa ser refeita, porque a agenda de setup do mês fecha.</p>
-
-  <div class="sig">
-    <b>Isaías Oliveira</b><br>
-    Tráfego pago, atendimento por IA e automação de vendas desde 2012<br>
-    Instagram: @isaias.c.oliveira
+    <div class="card" style="margin-top:28px">
+      <h3>O que isso custaria se fosse gente</h3>
+      <p style="color:var(--ink-2);font-size:14.5px">As três frentes são três funções. Contratadas, dão folha de pagamento. Aqui, dão uma mensalidade.</p>
+      <table>
+        <tr><th>Função</th><th>Se fosse contratado</th><th class="r">Por mês</th></tr>
+        <tr><td>Gestor de tráfego</td><td>Cria, otimiza e escala as campanhas</td><td class="r">~R$ 1.800</td></tr>
+        <tr><td>Atendente comercial 24 h</td><td>Responde, tira dúvida, fecha, cobra retorno</td><td class="r">~R$ 3.000</td></tr>
+        <tr><td>Analista de dados</td><td>Mede custo por venda e diz onde pôr dinheiro</td><td class="r">~R$ 1.500</td></tr>
+        <tr class="total"><td colspan="2">Estrutura humana</td><td class="r">~R$ 6.300</td></tr>
+        <tr class="you"><td colspan="2">Esta proposta, as três funções instaladas</td><td class="r">R$ 1.500</td></tr>
+      </table>
+      <p class="fine" style="margin:10px 0 0">Valores de referência de mercado para contratação. Menos de R$ 50 por dia pelas três funções.</p>
+    </div>
   </div>
 </section>
 
-</div>
+<section id="investimento">
+  <div class="wrap">
+    <div class="eyebrow">Investimento</div>
+    <h2>Preço fechado. Mídia no seu cartão. Mensalidade só no 30º dia.</h2>
+    <p class="lede">Você pediu pra começar devagar. Então o primeiro mês é só o setup, e a verba de anúncio começa em R$ 40 por dia. Você vê um mês inteiro de operação antes da primeira mensalidade.</p>
+    <div class="price">
+      <div>
+        <div class="plan">
+          <span class="eyebrow" style="margin-bottom:6px">Setup · pago uma vez</span>
+          <div class="big">R$ 3.000 <small>hoje</small></div>
+          <ul>
+            <li>Correção dos 8 vazamentos (primeira tela, botões, links, layout mobile, blocos em branco, link da bio)</li>
+            <li>Pixel + API de Conversões instalados e testados</li>
+            <li>Conta de anúncios e Gerenciador de Negócios estruturados</li>
+            <li>Atendente de IA treinada no Cap Training, ligada no seu WhatsApp</li>
+            <li>Painel configurado no seu celular</li>
+            <li>6 criativos iniciais e campanhas no ar</li>
+          </ul>
+        </div>
+        <div class="plan" style="margin-top:14px">
+          <span class="eyebrow" style="margin-bottom:6px">Mensal · a partir do 30º dia</span>
+          <div class="big">R$ 1.500 <small>/ mês</small></div>
+          <ul>
+            <li>Gestão diária das campanhas e criativo novo toda semana</li>
+            <li>Atendente de IA e painel em funcionamento, hospedagem inclusa</li>
+            <li>Relatório semanal no WhatsApp + reunião mensal de 30 min</li>
+            <li>Sem fidelidade e sem multa: mês a mês, avisa no ciclo anterior e encerra</li>
+          </ul>
+        </div>
+      </div>
+      <div class="summary">
+        <div class="eyebrow" style="margin-bottom:8px">Simule a sua conta</div>
+        <div class="ctl">
+          <label><span>Verba de anúncio por dia</span><b id="vLbl">R$ 40</b></label>
+          <input type="range" id="verba" min="20" max="120" step="5" value="40">
+        </div>
+        <div class="ctl">
+          <label><span>Tamanho que mais vende</span></label>
+          <div class="seg">
+            <button type="button" data-t="585">Small · R$ 585</button>
+            <button type="button" data-t="685" class="on">Big · R$ 685</button>
+          </div>
+        </div>
+        <div class="row"><span>Setup (uma vez)</span><b>R$ 3.000</b></div>
+        <div class="row"><span>Mídia no mês 1 (pago à Meta)</span><b id="m1">R$ 1.200</b></div>
+        <div class="row"><span>Mensalidade no mês 1</span><b>R$ 0</b></div>
+        <div class="tot">
+          <span style="font-size:13px;color:var(--muted)">Para começar</span>
+          <div class="big" id="t1">R$ 4.200</div>
+          <span style="font-size:13px;color:var(--muted)">Mês 2 em diante (mídia + mensalidade)</span>
+          <div class="big" id="t2" style="font-size:22px">R$ 2.700</div>
+        </div>
+        <div class="row" style="margin-top:14px;border-top:1px solid var(--line)"><span>Vendas no mês que pagam mídia + mensalidade</span><b id="be">4</b></div>
+        <p class="note">Isso é a régua, não uma previsão. Ninguém sério promete número de vendas. O painel mostra, em 30 dias, se a conta está fechando. A partir daí, só sobe a verba o que já provou que volta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prazos">
+  <div class="wrap">
+    <div class="eyebrow">Linha do tempo</div>
+    <h2>Do pagamento ao primeiro anúncio em 14 dias</h2>
+    <p class="lede">O relógio começa quando o setup é pago. A primeira semana é conserto. A segunda é ligar o motor.</p>
+    <ol class="tl">
+      <li><div class="d">Dia 0</div><b>Pagamento + briefing</b><p>40 minutos online: margem, estoque, prazo de envio, dúvidas que os pais fazem.</p></li>
+      <li><div class="d">Dias 1 a 5</div><b>Tampar os vazamentos</b><p>Primeira tela, botões, links, layout mobile, Pixel e API de Conversões no ar e testados.</p></li>
+      <li><div class="d">Dias 4 a 8</div><b>Atendente de IA</b><p>Treinada no Cap Training. Você aprova cada resposta antes de ligar.</p></li>
+      <li><div class="d">Dias 5 a 10</div><b>Criativos</b><p>Você grava o aparelho em uso com o celular. Eu roteirizo, edito e escrevo o texto. 6 anúncios.</p></li>
+      <li><div class="d">Dia 14</div><b>No ar</b><p>Campanhas rodando, atendente respondendo, painel no seu celular. A mensalidade só começa no dia 30.</p></li>
+    </ol>
+    <div class="card soft" style="margin-top:22px">
+      <h3>Recomendo três meses. Mas você não fica preso a nada.</h3>
+      <p style="margin:0;color:var(--ink-2)">No primeiro mês a Meta aprende quem é o pai que compra. No segundo aparecem os criativos vencedores e o custo por venda cai. No terceiro dá pra escalar com histórico. Isso é recomendação técnica, não cláusula: não há fidelidade nem multa. Eu prefiro que você fique porque está vendendo, não porque assinou um papel.</p>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Dúvidas</div>
+    <h2>Perguntas que costumam vir</h2>
+    <details><summary>A verba de anúncio passa por você?</summary><p>Não. Os R$ 40 por dia são pagos por você, no seu cartão, direto para a Meta, na sua conta de anúncios. Eu opero a campanha, mas o dinheiro da mídia nunca passa pelo meu caixa. Você pode pausar quando quiser.</p></details>
+    <details><summary>Eu estou com pouca grana. Por que não começar só com o anúncio?</summary><p>Porque anúncio num site com botão morto e link de WhatsApp quebrado é o jeito mais rápido de perder dinheiro. Por isso a primeira semana é conserto, e a verba começa pequena. Começar devagar é o método certo pro seu momento, não uma limitação.</p></details>
+    <details><summary>Como funciona o consumo da atendente de IA?</summary><p>A mensalidade cobre a atendente em si: servidor, treinamento, ajustes e manutenção. O processamento de cada conversa é cobrado por recarga, conforme o volume real de atendimento. Você recarrega quando quiser e vê o saldo no painel. Sem surpresa no fim do mês.</p></details>
+    <details><summary>Tem fidelidade? E se eu quiser parar?</summary><p>Não existe fidelidade nem multa. As mensalidades correm mês a mês. Se não fizer sentido, você avisa no ciclo anterior e encerramos. O setup é pago uma vez e as correções no site ficam com você.</p></details>
+    <details><summary>Você garante resultado?</summary><p>Garantir venda é mentir. O que eu garanto é método, transparência total no painel e a mesma estrutura que roda no meu próprio negócio. Quem te prometer número de vendas antes de rodar está chutando com o seu dinheiro.</p></details>
+    <details><summary>Quem opera no dia a dia?</summary><p>Eu, diretamente. Não existe camada de atendimento entre nós. Você fala com quem mexe na campanha e com quem treina a atendente.</p></details>
+    <details><summary>Por que a proposta tem prazo?</summary><p>Porque a implantação é feita por mim, uma de cada vez, e a agenda desta semana tem uma vaga. Depois de 26/10 o cronograma entra na fila do próximo ciclo e as condições são recalculadas. Não é pressão de vendedor: é capacidade real de entrega.</p></details>
+  </div>
+</section>
+
+<section class="final" id="comecar">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center">Próximo passo</div>
+    <h2>Em 14 dias, o pai certo vê o Cap Training e consegue comprar.</h2>
+    <p class="lede" style="margin:0 auto 10px">Me responde <b style="color:var(--ink)">"BORA"</b> aqui no WhatsApp. Eu te mando o link do setup e marcamos o briefing de 40 minutos ainda esta semana.</p>
+    <div class="btns">
+      <a class="btn" href="#comecar" onclick="return false">Responder "BORA" no WhatsApp</a>
+      <a class="btn ghost" href="#diagnostico">Rever os 8 pontos</a>
+    </div>
+    <p class="fine">Sem fidelidade e sem multa. Mensalidade só a partir do 30º dia. Verba de mídia no seu cartão, no seu controle. Proposta válida até 26/10/2026.</p>
+  </div>
+</section>
+
+<footer>ISAÍAS OLIVEIRA · TRÁFEGO, ATENDIMENTO POR IA E AUTOMAÇÃO DE VENDAS DESDE 2012 · @isaias.c.oliveira</footer>
+
+<script>
+(function(){
+  var end=new Date('2026-10-26T23:59:59-03:00').getTime();
+  function pad(n){return (n<10?'0':'')+n}
+  function tick(){
+    var d=Math.max(0,end-Date.now());
+    document.getElementById('cd').textContent=Math.floor(d/864e5);
+    document.getElementById('ch').textContent=pad(Math.floor(d/36e5)%24);
+    document.getElementById('cm').textContent=pad(Math.floor(d/6e4)%60);
+    document.getElementById('cs').textContent=pad(Math.floor(d/1e3)%60);
+  }
+  tick(); setInterval(tick,1000);
+
+  var verba=document.getElementById('verba'), ticket=685;
+  function brl(n){return 'R$ '+Math.round(n).toLocaleString('pt-BR')}
+  function calc(){
+    var v=+verba.value, midia=v*30;
+    document.getElementById('vLbl').textContent=brl(v);
+    document.getElementById('m1').textContent=brl(midia);
+    document.getElementById('t1').textContent=brl(3000+midia);
+    document.getElementById('t2').textContent=brl(midia+1500);
+    document.getElementById('be').textContent=Math.ceil((midia+1500)/ticket);
+  }
+  verba.addEventListener('input',calc);
+  document.querySelectorAll('.seg button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.seg button').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on'); ticket=+b.dataset.t; calc();
+    });
+  });
+  calc();
+})();
+</script>
 </body>
 </html>
